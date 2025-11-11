@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Generator Kelompok Acak</title>
+    <title>Generator Kelompok Adil (v3)</title>
     <style>
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
@@ -91,7 +91,7 @@
 <body>
 
     <div class="container">
-        <h1>Generator Kelompok Acak</h1>
+        <h1>Generator Kelompok Paling Adil</h1>
         
         <div class="controls">
             <label for="groupCount">Jumlah Kelompok:</label>
@@ -105,7 +105,6 @@
 
     <script>
         // --- DAFTAR SISWA ANDA ---
-        // (L) = Laki-laki, (P) = Perempuan
         const students = [
             { name: "AKMAL RAMADHAN", gender: "L" },
             { name: "ATTALITHA NABILAH DANISWARA", gender: "P" },
@@ -131,67 +130,97 @@
 
         // Fungsi untuk mengacak array (Fisher-Yates Shuffle)
         function shuffle(array) {
-            for (let i = array.length - 1; i > 0; i--) {
-                const j = Math.floor(Math.random() * (i + 1));
-                [array[i], array[j]] = [array[j], array[i]];
+            let currentIndex = array.length, randomIndex;
+            while (currentIndex != 0) {
+                randomIndex = Math.floor(Math.random() * currentIndex);
+                currentIndex--;
+                [array[currentIndex], array[randomIndex]] = [
+                    array[randomIndex], array[currentIndex]];
             }
+            return array;
+        }
+
+        // Fungsi untuk mencari group dengan anggota paling sedikit
+        function findSmallestGroup(groups) {
+            let smallestGroup = groups[0];
+            for (let i = 1; i < groups.length; i++) {
+                if (groups[i].members.length < smallestGroup.members.length) {
+                    smallestGroup = groups[i];
+                }
+            }
+            return smallestGroup;
         }
 
         // Fungsi utama untuk membuat kelompok
         function generateGroups() {
             const numGroups = parseInt(document.getElementById('groupCount').value);
-            if (numGroups < 2 || isNaN(numGroups)) {
-                alert("Masukkan jumlah kelompok yang valid (minimal 2).");
+            if (numGroups < 2 || isNaN(numGroups) || numGroups > students.length) {
+                alert("Masukkan jumlah kelompok yang valid (minimal 2 dan tidak lebih dari jumlah siswa).");
                 return;
             }
 
-            // 1. Pisahkan berdasarkan gender
-            const males = students.filter(s => s.gender === 'L');
-            const females = students.filter(s => s.gender === 'P');
+            // 1. Pisahkan dan Acak berdasarkan gender
+            const males = shuffle(students.filter(s => s.gender === 'L'));
+            const females = shuffle(students.filter(s => s.gender === 'P'));
 
-            // 2. Acak masing-masing daftar gender
-            shuffle(males);
-            shuffle(females);
+            // 2. Tentukan mana daftar yang lebih besar (untuk didistribusikan lebih dulu)
+            let largerList = females;
+            let smallerList = males;
+            
+            // Tukar jika laki-laki ternyata lebih banyak
+            if (males.length > females.length) {
+                largerList = males;
+                smallerList = females;
+            }
 
             // 3. Siapkan kerangka kelompok
             let groups = [];
             for (let i = 0; i < numGroups; i++) {
                 groups.push({
+                    name: `Kelompok ${i + 1}`,
                     members: [],
                     maleCount: 0,
                     femaleCount: 0
                 });
             }
 
-            // 4. Distribusikan laki-laki secara merata
-            males.forEach((male, index) => {
+            // 4. Distribusikan daftar TERBESAR lebih dulu (metode 'bagi kartu' biasa)
+            // Ini akan membuat sebaran gender dasar yang rata
+            largerList.forEach((student, index) => {
                 const groupIndex = index % numGroups;
-                groups[groupIndex].members.push(male.name);
-                groups[groupIndex].maleCount++;
+                groups[groupIndex].members.push(student.name);
+                if (student.gender === 'L') groups[groupIndex].maleCount++;
+                if (student.gender === 'P') groups[groupIndex].femaleCount++;
             });
 
-            // 5. Distribusikan perempuan secara merata
-            females.forEach((female, index) => {
-                const groupIndex = index % numGroups;
-                groups[groupIndex].members.push(female.name);
-                groups[groupIndex].femaleCount++;
+            // 5. Distribusikan daftar TERKECIL (metode 'isi celah')
+            // Ini akan menyeimbangkan JUMLAH TOTAL
+            smallerList.forEach((student) => {
+                // Cari group dengan total anggota paling sedikit SAAT INI
+                const smallestGroup = findSmallestGroup(groups);
+                
+                // Tambahkan siswa ke group tersebut
+                smallestGroup.members.push(student.name);
+                if (student.gender === 'L') smallestGroup.maleCount++;
+                if (student.gender === 'P') smallestGroup.femaleCount++;
             });
 
             // 6. Tampilkan hasilnya di HTML
             const resultsDiv = document.getElementById('results');
             resultsDiv.innerHTML = ''; // Kosongkan hasil sebelumnya
 
-            groups.forEach((group, index) => {
+            groups.forEach((group) => {
                 const groupElement = document.createElement('div');
                 groupElement.className = 'group';
 
                 let memberList = '';
-                group.members.forEach(name => {
+                // Urutkan nama anggota berdasarkan abjad agar rapi
+                group.members.sort().forEach(name => {
                     memberList += `<li>${name}</li>`;
                 });
 
                 groupElement.innerHTML = `
-                    <h3>Kelompok ${index + 1}</h3>
+                    <h3>${group.name}</h3>
                     <p><strong>Total: ${group.members.length}</strong> (L: ${group.maleCount}, P: ${group.femaleCount})</p>
                     <ul>${memberList}</ul>
                 `;
