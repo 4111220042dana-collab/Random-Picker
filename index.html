@@ -12,204 +12,204 @@
 <body>
     <div id="root"></div>
     <script type="text/babel">
-import React, { useState } from 'react';
-import { Users, Play, AlertCircle } from 'lucide-react';
-const { useState } = React;
-
-export default function RandomTeamGenerator() {
-  const [numGroups, setNumGroups] = useState('');
-  const [isGenerating, setIsGenerating] = useState(false);
-  const [results, setResults] = useState(null);
-  const [error, setError] = useState('');
-
-  const students = [
-    { name: "AKMAL RAMADHAN", gender: "L" },
-    { name: "ATTALITHA NABILAH DANISWARA", gender: "P" },
-    { name: "BIMANTARA FAQIH", gender: "L" },
-    { name: "CHARISMA KAUTSARANI", gender: "P" },
-    { name: "DEWANTIKA AYU ANANDA ZAWAWI", gender: "P" },
-    { name: "HARDANA GADING PERDANA PUTRA", gender: "L" },
-    { name: "ISHAQ RILA PARAMUDEA", gender: "P" },
-    { name: "M. HAFIDZ MEIDITAMBUA", gender: "L" },
-    { name: "MARIA PUTRI PARAMITA", gender: "P" },
-    { name: "MUHAMMAD HAIKAL UBAIDILLAH", gender: "L" },
-    { name: "MUTHI'A SEKHAR NEGARI", gender: "P" },
-    { name: "OLIVIA PUTRI YUNITASARI", gender: "P" },
-    { name: "PUTU RICO NATA SUJANA", gender: "L" },
-    { name: "SAFRIZAL BIMA ARSYADA", gender: "L" },
-    { name: "SHELSI CINDY AVIRA", gender: "P" },
-    { name: "SYAHNA MARISAH", gender: "P" },
-    { name: "SYAIMA SALSABIL SAFINATUNNAJAH", gender: "P" },
-    { name: "VALENT BRILLIANTINO WIDYSETYA", gender: "L" },
-    { name: "VANDA CAROLINA A L", gender: "P" }
-  ];
-
-  const simulateGeneration = async () => {
-    if (!numGroups || numGroups < 1) {
-      setError('Masukkan jumlah kelompok yang valid');
-      return;
-    }
-
-    const groups = parseInt(numGroups);
-    if (groups > students.length) {
-      setError('Jumlah kelompok tidak boleh lebih dari jumlah siswa');
-      return;
-    }
-
-    setError('');
-    setIsGenerating(true);
-
-    // Simulate the random assignment process
-    await new Promise(resolve => setTimeout(resolve, 1500));
-
-    // Shuffle all students randomly
-    const shuffledStudents = [...students].sort(() => Math.random() - 0.5);
-
-    // Calculate base size and how many groups get an extra member
-    const totalStudents = students.length;
-    const baseSize = Math.floor(totalStudents / groups);
-    const remainder = totalStudents % groups;
-
-    // Create groups with balanced sizes
-    const teamResults = [];
-    let currentIndex = 0;
-
-    for (let i = 0; i < groups; i++) {
-      // Groups with index < remainder get one extra member
-      const groupSize = i < remainder ? baseSize + 1 : baseSize;
-      const group = shuffledStudents.slice(currentIndex, currentIndex + groupSize);
-      teamResults.push(group);
-      currentIndex += groupSize;
-    }
-
-    setResults(teamResults);
-    setIsGenerating(false);
-  };
-
-  return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-50 to-blue-50 p-8">
-      <div className="max-w-6xl mx-auto">
-        {/* Header */}
-        <div className="text-center mb-8">
-          <div className="flex items-center justify-center gap-3 mb-4">
-            <Users className="w-12 h-12 text-purple-600" />
-            <h1 className="text-4xl font-bold text-gray-800">
-              Random Team Generator
-            </h1>
-          </div>
-          <p className="text-gray-600">
-            Pembagian kelompok otomatis dengan distribusi gender merata
-          </p>
-        </div>
-
-        {/* Input Section */}
-        <div className="bg-white rounded-2xl shadow-lg p-8 mb-8">
-          <div className="max-w-md mx-auto">
-            <label className="block text-lg font-semibold text-gray-700 mb-3">
-              Jumlah Kelompok
-            </label>
-            <input
-              type="number"
-              min="1"
-              max={students.length}
-              value={numGroups}
-              onChange={(e) => setNumGroups(e.target.value)}
-              placeholder="Masukkan jumlah kelompok..."
-              className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-purple-500 focus:outline-none text-lg"
-            />
-            
-            {error && (
-              <div className="mt-4 flex items-start gap-2 text-red-600 bg-red-50 p-3 rounded-lg">
-                <AlertCircle className="w-5 h-5 flex-shrink-0 mt-0.5" />
-                <span>{error}</span>
+    import React, { useState } from 'react';
+    import { Users, Play, AlertCircle } from 'lucide-react';
+    const { useState } = React;
+    
+    export default function RandomTeamGenerator() {
+      const [numGroups, setNumGroups] = useState('');
+      const [isGenerating, setIsGenerating] = useState(false);
+      const [results, setResults] = useState(null);
+      const [error, setError] = useState('');
+    
+      const students = [
+        { name: "AKMAL RAMADHAN", gender: "L" },
+        { name: "ATTALITHA NABILAH DANISWARA", gender: "P" },
+        { name: "BIMANTARA FAQIH", gender: "L" },
+        { name: "CHARISMA KAUTSARANI", gender: "P" },
+        { name: "DEWANTIKA AYU ANANDA ZAWAWI", gender: "P" },
+        { name: "HARDANA GADING PERDANA PUTRA", gender: "L" },
+        { name: "ISHAQ RILA PARAMUDEA", gender: "P" },
+        { name: "M. HAFIDZ MEIDITAMBUA", gender: "L" },
+        { name: "MARIA PUTRI PARAMITA", gender: "P" },
+        { name: "MUHAMMAD HAIKAL UBAIDILLAH", gender: "L" },
+        { name: "MUTHI'A SEKHAR NEGARI", gender: "P" },
+        { name: "OLIVIA PUTRI YUNITASARI", gender: "P" },
+        { name: "PUTU RICO NATA SUJANA", gender: "L" },
+        { name: "SAFRIZAL BIMA ARSYADA", gender: "L" },
+        { name: "SHELSI CINDY AVIRA", gender: "P" },
+        { name: "SYAHNA MARISAH", gender: "P" },
+        { name: "SYAIMA SALSABIL SAFINATUNNAJAH", gender: "P" },
+        { name: "VALENT BRILLIANTINO WIDYSETYA", gender: "L" },
+        { name: "VANDA CAROLINA A L", gender: "P" }
+      ];
+    
+      const simulateGeneration = async () => {
+        if (!numGroups || numGroups < 1) {
+          setError('Masukkan jumlah kelompok yang valid');
+          return;
+        }
+    
+        const groups = parseInt(numGroups);
+        if (groups > students.length) {
+          setError('Jumlah kelompok tidak boleh lebih dari jumlah siswa');
+          return;
+        }
+    
+        setError('');
+        setIsGenerating(true);
+    
+        // Simulate the random assignment process
+        await new Promise(resolve => setTimeout(resolve, 1500));
+    
+        // Shuffle all students randomly
+        const shuffledStudents = [...students].sort(() => Math.random() - 0.5);
+    
+        // Calculate base size and how many groups get an extra member
+        const totalStudents = students.length;
+        const baseSize = Math.floor(totalStudents / groups);
+        const remainder = totalStudents % groups;
+    
+        // Create groups with balanced sizes
+        const teamResults = [];
+        let currentIndex = 0;
+    
+        for (let i = 0; i < groups; i++) {
+          // Groups with index < remainder get one extra member
+          const groupSize = i < remainder ? baseSize + 1 : baseSize;
+          const group = shuffledStudents.slice(currentIndex, currentIndex + groupSize);
+          teamResults.push(group);
+          currentIndex += groupSize;
+        }
+    
+        setResults(teamResults);
+        setIsGenerating(false);
+      };
+    
+      return (
+        <div className="min-h-screen bg-gradient-to-br from-purple-50 to-blue-50 p-8">
+          <div className="max-w-6xl mx-auto">
+            {/* Header */}
+            <div className="text-center mb-8">
+              <div className="flex items-center justify-center gap-3 mb-4">
+                <Users className="w-12 h-12 text-purple-600" />
+                <h1 className="text-4xl font-bold text-gray-800">
+                  Random Team Generator
+                </h1>
+              </div>
+              <p className="text-gray-600">
+                Pembagian kelompok otomatis dengan distribusi gender merata
+              </p>
+            </div>
+    
+            {/* Input Section */}
+            <div className="bg-white rounded-2xl shadow-lg p-8 mb-8">
+              <div className="max-w-md mx-auto">
+                <label className="block text-lg font-semibold text-gray-700 mb-3">
+                  Jumlah Kelompok
+                </label>
+                <input
+                  type="number"
+                  min="1"
+                  max={students.length}
+                  value={numGroups}
+                  onChange={(e) => setNumGroups(e.target.value)}
+                  placeholder="Masukkan jumlah kelompok..."
+                  className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-purple-500 focus:outline-none text-lg"
+                />
+                
+                {error && (
+                  <div className="mt-4 flex items-start gap-2 text-red-600 bg-red-50 p-3 rounded-lg">
+                    <AlertCircle className="w-5 h-5 flex-shrink-0 mt-0.5" />
+                    <span>{error}</span>
+                  </div>
+                )}
+    
+                <button
+                  onClick={simulateGeneration}
+                  disabled={isGenerating}
+                  className="w-full mt-6 bg-gradient-to-r from-purple-600 to-blue-600 text-white py-4 rounded-lg font-semibold text-lg hover:from-purple-700 hover:to-blue-700 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                >
+                  {isGenerating ? (
+                    <>
+                      <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                      Membuat Kelompok...
+                    </>
+                  ) : (
+                    <>
+                      <Play className="w-5 h-5" />
+                      Generate Kelompok
+                    </>
+                  )}
+                </button>
+              </div>
+    
+              {/* Info */}
+              <div className="mt-6 p-4 bg-blue-50 rounded-lg">
+                <p className="text-sm text-gray-700 text-center">
+                  <strong>Total Siswa:</strong> {students.length} orang 
+                  ({students.filter(s => s.gender === "L").length} Laki-laki, {students.filter(s => s.gender === "P").length} Perempuan)
+                </p>
+              </div>
+            </div>
+    
+            {/* Results Section */}
+            {results && (
+              <div className="space-y-6">
+                <h2 className="text-2xl font-bold text-gray-800 text-center mb-6">
+                  Hasil Pembagian Kelompok
+                </h2>
+                
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {results.map((team, index) => {
+                    const maleCount = team.filter(s => s.gender === "L").length;
+                    const femaleCount = team.filter(s => s.gender === "P").length;
+                    
+                    return (
+                      <div
+                        key={index}
+                        className="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow"
+                      >
+                        <div className="bg-gradient-to-r from-purple-500 to-blue-500 p-4">
+                          <h3 className="text-xl font-bold text-white text-center">
+                            Kelompok {index + 1}
+                          </h3>
+                          <p className="text-white text-center text-sm mt-1">
+                            {maleCount} L • {femaleCount} P
+                          </p>
+                        </div>
+                        
+                        <div className="p-4">
+                          <ul className="space-y-2">
+                            {team.map((student, studentIndex) => (
+                              <li
+                                key={studentIndex}
+                                className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors"
+                              >
+                                <div className={`w-8 h-8 rounded-full flex items-center justify-center text-white font-bold text-sm ${
+                                  student.gender === "L" ? "bg-blue-500" : "bg-pink-500"
+                                }`}>
+                                  {student.gender}
+                                </div>
+                                <span className="text-sm text-gray-700 font-medium flex-1">
+                                  {student.name}
+                                </span>
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
               </div>
             )}
-
-            <button
-              onClick={simulateGeneration}
-              disabled={isGenerating}
-              className="w-full mt-6 bg-gradient-to-r from-purple-600 to-blue-600 text-white py-4 rounded-lg font-semibold text-lg hover:from-purple-700 hover:to-blue-700 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
-            >
-              {isGenerating ? (
-                <>
-                  <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                  Membuat Kelompok...
-                </>
-              ) : (
-                <>
-                  <Play className="w-5 h-5" />
-                  Generate Kelompok
-                </>
-              )}
-            </button>
-          </div>
-
-          {/* Info */}
-          <div className="mt-6 p-4 bg-blue-50 rounded-lg">
-            <p className="text-sm text-gray-700 text-center">
-              <strong>Total Siswa:</strong> {students.length} orang 
-              ({students.filter(s => s.gender === "L").length} Laki-laki, {students.filter(s => s.gender === "P").length} Perempuan)
-            </p>
           </div>
         </div>
-
-        {/* Results Section */}
-        {results && (
-          <div className="space-y-6">
-            <h2 className="text-2xl font-bold text-gray-800 text-center mb-6">
-              Hasil Pembagian Kelompok
-            </h2>
-            
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {results.map((team, index) => {
-                const maleCount = team.filter(s => s.gender === "L").length;
-                const femaleCount = team.filter(s => s.gender === "P").length;
-                
-                return (
-                  <div
-                    key={index}
-                    className="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow"
-                  >
-                    <div className="bg-gradient-to-r from-purple-500 to-blue-500 p-4">
-                      <h3 className="text-xl font-bold text-white text-center">
-                        Kelompok {index + 1}
-                      </h3>
-                      <p className="text-white text-center text-sm mt-1">
-                        {maleCount} L • {femaleCount} P
-                      </p>
-                    </div>
-                    
-                    <div className="p-4">
-                      <ul className="space-y-2">
-                        {team.map((student, studentIndex) => (
-                          <li
-                            key={studentIndex}
-                            className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors"
-                          >
-                            <div className={`w-8 h-8 rounded-full flex items-center justify-center text-white font-bold text-sm ${
-                              student.gender === "L" ? "bg-blue-500" : "bg-pink-500"
-                            }`}>
-                              {student.gender}
-                            </div>
-                            <span className="text-sm text-gray-700 font-medium flex-1">
-                              {student.name}
-                            </span>
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-          </div>
-        )}
-      </div>
-    </div>
-  );
-}
-    
+      );
+    }
     ReactDOM.render(<RandomTeamGenerator />, document.getElementById('root'));
     </script>
 </body>
 </html>
+
